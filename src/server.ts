@@ -1,4 +1,5 @@
 require("dotenv").config();
+import { graphqlUploadExpress } from "graphql-upload";
 import * as express from "express";
 import * as logger from "morgan";
 import { ApolloServer } from "apollo-server-express";
@@ -11,6 +12,7 @@ const PORT = process.env.PORT;
 const apollo = new ApolloServer({
   resolvers,
   typeDefs,
+  uploads: false,
   context: async ({ req }) => {
     return {
       loggedInUser: await getUser(req.headers.token),
@@ -20,6 +22,7 @@ const apollo = new ApolloServer({
 });
 
 const app = express();
+app.use(graphqlUploadExpress());
 app.use(logger("combined")); // logger는 middleware 전에 적용
 apollo.applyMiddleware({ app });
 app.use("/static", express.static("uploads"));
