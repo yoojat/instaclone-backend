@@ -1,0 +1,20 @@
+generates:
+  src/types/graph.ts:
+    schema:
+      - src/**/*.graphql
+    plugins:
+      - typescript
+      - typescript-resolvers
+      - add:
+          content: "import { FileUpload } from 'graphql-upload';"
+    config:
+      contextType: src/types/apollo#IContext
+      declarationKind:
+        type: interface
+        input: interface
+      namingConvention:
+        enumValues: upper-case#upperCase
+      scalars:
+        JSON: "{[key: string]: any}"
+        DateTime: Date
+        Upload: FileUpload

@@ -1,0 +1,5 @@
+scalar Upload
+type MutationResponse {
+  ok: Boolean!
+  error: String
+}
