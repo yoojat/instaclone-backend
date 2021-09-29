@@ -77,12 +77,12 @@ export interface Mutation {
   editComment: MutationResponse;
   editPhoto: MutationResponse;
   editProfile: MutationResponse;
-  followUser?: Maybe<MutationResponse>;
+  followUser: MutationResponse;
   login: LoginResult;
   readMessage: MutationResponse;
   sendMessage: MutationResponse;
   toggleLike: MutationResponse;
-  unfollowUser?: Maybe<MutationResponse>;
+  unfollowUser: MutationResponse;
   uploadPhoto?: Maybe<Photo>;
 }
 
@@ -176,17 +176,20 @@ export type MutationUploadPhotoArgs = {
 export interface MutationResponse {
   __typename?: 'MutationResponse';
   error?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
   ok: Scalars['Boolean'];
 }
 
 export interface Photo {
   __typename?: 'Photo';
   caption?: Maybe<Scalars['String']>;
-  comments: Scalars['Int'];
+  commentNumber: Scalars['Int'];
+  comments: Array<Maybe<Comment>>;
   createdAt: Scalars['String'];
   file: Scalars['String'];
   hastags?: Maybe<Array<Maybe<Hashtag>>>;
   id: Scalars['Int'];
+  isLiked: Scalars['Boolean'];
   isMine: Scalars['Boolean'];
   likes: Scalars['Int'];
   updatedAt: Scalars['String'];
@@ -195,6 +198,7 @@ export interface Photo {
 
 export interface Query {
   __typename?: 'Query';
+  me?: Maybe<User>;
   searchPhotos?: Maybe<Array<Maybe<Photo>>>;
   searchUsers?: Maybe<Array<Maybe<User>>>;
   seeFeed?: Maybe<Array<Maybe<Photo>>>;
@@ -482,28 +486,31 @@ export type MutationResolvers<ContextType = IContext, ParentType extends Resolve
   editComment?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationEditCommentArgs, 'id' | 'payload'>>;
   editPhoto?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationEditPhotoArgs, 'caption' | 'id'>>;
   editProfile?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationEditProfileArgs, never>>;
-  followUser?: Resolver<Maybe<ResolversTypes['MutationResponse']>, ParentType, ContextType, RequireFields<MutationFollowUserArgs, 'username'>>;
+  followUser?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationFollowUserArgs, 'username'>>;
   login?: Resolver<ResolversTypes['LoginResult'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'password' | 'username'>>;
   readMessage?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationReadMessageArgs, 'id'>>;
   sendMessage?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'payload'>>;
   toggleLike?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationToggleLikeArgs, 'id'>>;
-  unfollowUser?: Resolver<Maybe<ResolversTypes['MutationResponse']>, ParentType, ContextType, RequireFields<MutationUnfollowUserArgs, 'username'>>;
+  unfollowUser?: Resolver<ResolversTypes['MutationResponse'], ParentType, ContextType, RequireFields<MutationUnfollowUserArgs, 'username'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Photo']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'file'>>;
 };
 
 export type MutationResponseResolvers<ContextType = IContext, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PhotoResolvers<ContextType = IContext, ParentType extends ResolversParentTypes['Photo'] = ResolversParentTypes['Photo']> = {
   caption?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  comments?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  commentNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  comments?: Resolver<Array<Maybe<ResolversTypes['Comment']>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   file?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hastags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Hashtag']>>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  isLiked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMine?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -512,6 +519,7 @@ export type PhotoResolvers<ContextType = IContext, ParentType extends ResolversP
 };
 
 export type QueryResolvers<ContextType = IContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   searchPhotos?: Resolver<Maybe<Array<Maybe<ResolversTypes['Photo']>>>, ParentType, ContextType, RequireFields<QuerySearchPhotosArgs, 'keyword'>>;
   searchUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, RequireFields<QuerySearchUsersArgs, 'keyword'>>;
   seeFeed?: Resolver<Maybe<Array<Maybe<ResolversTypes['Photo']>>>, ParentType, ContextType>;

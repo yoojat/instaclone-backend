@@ -4,9 +4,11 @@ type Photo {
   file: String!
   caption: String
   likes: Int!
-  comments: Int!
+  commentNumber: Int!
+  comments: [Comment]!
   hastags: [Hashtag]
   isMine: Boolean!
+  isLiked: Boolean!
   createdAt: String!
   updatedAt: String!
 }

@@ -30,6 +30,10 @@ const resolvers: Resolvers = {
         await client.like.delete({
           where: likeWhere,
         });
+        return {
+          ok: true,
+          error: null,
+        };
       } else {
         await client.like.create({
           data: {
@@ -45,6 +49,10 @@ const resolvers: Resolvers = {
             },
           },
         });
+        return {
+          ok: true,
+          error: null,
+        };
       }
     }),
   },

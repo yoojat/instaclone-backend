@@ -9,6 +9,7 @@ const resolvers: Resolvers = {
       { firstName, lastName, username, email, password }
     ) => {
       try {
+        console.log({ firstName, lastName, username, email });
         const existingUser = await client.user.findFirst({
           where: {
             OR: [
